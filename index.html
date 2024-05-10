@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CryptoMania</title>
+
+    <!--Main Template CSS Files-->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/normalize.css" />
+  </head>
+  <body>
+    <!-- Start Header -->
+    <div id="header">
+      <div id="container">
+        <a href="index.html" class="title">CryptoMania</a>
+      </div>
+    </div>
+    <!-- End Header -->
+    <!-- Start Hero -->
+    <div id="hero">
+      <div id="container">
+        <img src="images/crypto.jpg" alt="" class="img" />
+      </div>
+    </div>
+    <!-- End Hero -->
+    <!-- Start About -->
+    <div id="about">
+      <div id="container">
+        <span class="title">About</span>
+        <hr />
+        <p class="text">
+          This website is made by computer engineering students to implement several cryptography algorithmis using
+          javascript.
+        </p>
+      </div>
+    </div>
+    <!-- End About -->
+    <!-- Start Form -->
+    <div id="form">
+      <div id="container">
+        <span class="title">Algorithms</span>
+        <hr />
+        <span class="sub-title">1. Caesar Algorithm:</span>
+        <p id="info">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem vitae
+          necessitatibus unde qui?
+        </p>
+        <br />
+        <form>
+          <input type="text" id="caesar-text" name="text" placeholder="hello" title="Enter A Text To Encrypt or Decrypt" />
+          <input
+            type="number"
+            id="caesar-key"
+            name="key"
+            placeholder="5"
+            inputmode="numeric"
+            title="Enter A Number As Key" />
+          <input
+            type="text"
+            id="caesar-result"
+            name="result"
+            placeholder="mjqqt"
+            readonly
+            title="This Is The Output Result" />
+          <div id="form-buttons">
+            <button type="button" id="caesar-encrypt" name="encrypt">Encrypt</button>
+            <button type="button" id="caesar-decrypt" name="decrypt">Decrypt</button>
+          </div>
+          <br />
+          <hr />
+          <br />
+          <span class="sub-title">2. Autokey Algorithm:</span>
+          <p id="info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
+            vitae necessitatibus unde qui?
+          </p>
+          <br />
+          <input type="text" id="autokey-text" name="text" placeholder="Hello" title="Enter A Text To Encrypt or Decrypt" />
+          <input type="text" id="autokey-key" name="key" placeholder="n" title="Enter A Char as key" />
+          <input
+            type="text"
+            id="autokey-result"
+            name="result"
+            placeholder="ULPWZ"
+            readonly
+            title="This Is The Output Result" />
+          <div id="form-buttons">
+            <button type="button" id="autokey-encrypt" name="encrypt">Encrypt</button>
+            <button type="button" id="autokey-decrypt" name="decrypt">Decrypt</button>
+          </div>
+          <br />
+          <hr />
+          <br />
+          <span class="sub-title">3. Playfair Algorithm:</span>
+          <p id="info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
+            vitae necessitatibus unde qui?
+          </p>
+          <br />
+          <input
+            type="text"
+            id="playfair-text"
+            name="text"
+            placeholder="instruments"
+            title="Enter A Text To Encrypt or Decrypt" />
+          <input type="text" id="playfair-key" name="key" placeholder="Monarchy" title="Enter A Text As Key" />
+          <input
+            type="text"
+            id="playfair-result"
+            name="result"
+            placeholder="gatlmzclrqtx"
+            readonly
+            title="This Is The Output Result" />
+          <div id="form-buttons">
+            <button type="button" id="playfair-encrypt" name="encrypt">Encrypt</button>
+            <button type="button" id="playfair-decrypt" name="decrypt">Decrypt</button>
+          </div>
+          <br />
+          <hr />
+          <br />
+          <span class="sub-title">4. RSA Algorithm:</span>
+          <p id="info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
+            vitae necessitatibus unde qui?
+          </p>
+          <br />
+          <input
+            type="number"
+            id="rsa-m"
+            name="text"
+            placeholder="m"
+            inputmode="numeric"
+            title="Enter A Number To Encrypt / Decrypt" />
+          <input
+            type="number"
+            id="rsa-p"
+            name="key"
+            placeholder="p"
+            inputmode="numeric"
+            title="Enter The First Prime Number" />
+          <input
+            type="number"
+            id="rsa-q"
+            name="key"
+            placeholder="q"
+            inputmode="numeric"
+            title="Enter The Second Prime Number" />
+          <input
+            type="number"
+            id="rsa-e"
+            name="key"
+            placeholder="e"
+            inputmode="numeric"
+            title="Enter A Small Number As Exponent" />
+          <input type="text" id="rsa-result" name="result" placeholder="c" readonly title="This Is The Output Result" />
+          <div id="form-buttons">
+            <button type="button" id="rsa-encrypt" name="encrypt">Encrypt</button>
+            <button type="button" id="rsa-decrypt" name="decrypt">Decrypt</button>
+          </div>
+          <br />
+          <hr />
+          <br />
+          <span class="sub-title">5. S-DES Algorithm:</span>
+          <p id="info">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
+            vitae necessitatibus unde qui?
+          </p>
+          <br />
+          <input type="text" id="des-text" name="text" placeholder="Hello" />
+          <input type="text" id="des-key" name="key" placeholder="5" />
+          <input type="text" id="des-result" name="result" placeholder="Mjqqt" readonly title="This Is The Output Result" />
+          <div id="form-buttons">
+            <button type="button" id="des-encrypt" name="encrypt">Encrypt</button>
+            <button type="button" id="des-decrypt" name="decrypt">Decrypt</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- End Form -->
+    <!-- Start Footer -->
+    <div id="footer">
+      <div id="container">
+        <span class="footer-content"
+          >Copyright &copy; 2024 by <a href="#" class="footer-content">Technopia</a>. All Rights Reserved.</span
+        >
+      </div>
+    </div>
+    <!-- End Header -->
+
+    <!--Main Algorithms JS File-->
+    <script src="js/main.js"></script>
+  </body>
+</html>
