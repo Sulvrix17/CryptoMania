@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
     <title>CryptoMania</title>
 
     <!--Main Template CSS Files-->
@@ -129,31 +132,31 @@
             type="number"
             id="rsa-m"
             name="text"
-            placeholder="m"
+            placeholder="5"
             inputmode="numeric"
             title="Enter A Number To Encrypt / Decrypt" />
           <input
             type="number"
             id="rsa-p"
             name="key"
-            placeholder="p"
+            placeholder="7"
             inputmode="numeric"
-            title="Enter The First Prime Number" />
+            title="Enter The First Prime Number (p)" />
           <input
             type="number"
             id="rsa-q"
             name="key"
-            placeholder="q"
+            placeholder="11"
             inputmode="numeric"
-            title="Enter The Second Prime Number" />
+            title="Enter The Second Prime Number (q)" />
           <input
             type="number"
             id="rsa-e"
             name="key"
-            placeholder="e"
+            placeholder="13"
             inputmode="numeric"
-            title="Enter A Small Number As Exponent" />
-          <input type="text" id="rsa-result" name="result" placeholder="c" readonly title="This Is The Output Result" />
+            title="Enter A Small Number As Exponent (e)" />
+          <input type="text" id="rsa-result" name="result" placeholder="26" readonly title="This Is The Output Result" />
           <div id="form-buttons">
             <button type="button" id="rsa-encrypt" name="encrypt">Encrypt</button>
             <button type="button" id="rsa-decrypt" name="decrypt">Decrypt</button>
@@ -167,9 +170,27 @@
             vitae necessitatibus unde qui?
           </p>
           <br />
-          <input type="text" id="des-text" name="text" placeholder="Hello" />
-          <input type="text" id="des-key" name="key" placeholder="5" />
-          <input type="text" id="des-result" name="result" placeholder="Mjqqt" readonly title="This Is The Output Result" />
+          <input
+            type="number"
+            id="des-text"
+            name="text"
+            placeholder="10001010"
+            inputmode="numeric"
+            title="Enter A Number To Encrypt / Decrypt" />
+          <input
+            type="number"
+            id="des-key"
+            name="text"
+            placeholder="1100011110"
+            inputmode="numeric"
+            title="Enter A Number As Key" />
+          <input
+            type="text"
+            id="des-result"
+            name="result"
+            placeholder="01001011"
+            readonly
+            title="This Is The Output Result" />
           <div id="form-buttons">
             <button type="button" id="des-encrypt" name="encrypt">Encrypt</button>
             <button type="button" id="des-decrypt" name="decrypt">Decrypt</button>
