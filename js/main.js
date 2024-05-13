@@ -238,8 +238,8 @@
   }
 
   document.getElementById("playfair-encrypt").onclick = function () {
-    var playfair_text = document.getElementById("playfair-text").value;
-    var playfair_key = document.getElementById("playfair-key").value;
+    var playfair_text = document.getElementById("playfair-text").value.trim();
+    var playfair_key = document.getElementById("playfair-key").value.trim();
 
     playfair_result = playfairEncryption(playfair_text, playfair_key);
 
@@ -362,8 +362,8 @@
   }
 
   document.getElementById("playfair-decrypt").onclick = function () {
-    var playfair_text = document.getElementById("playfair-text").value;
-    var playfair_key = document.getElementById("playfair-key").value;
+    var playfair_text = document.getElementById("playfair-text").value.trim();
+    var playfair_key = document.getElementById("playfair-key").value.trim();
 
     playfair_result = playfairDecryption(playfair_text, playfair_key);
 
@@ -474,286 +474,374 @@
 }
 
 {
-  function des(key, plaintext) {
-    // int key[]= {0,0,1,0,0,1,0,1,1,1};
-    // const key = [1, 0, 1, 0, 0, 0, 0, 0, 1, 0]; // extra example for checking purpose
-    const P10 = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6];
-    const P8 = [6, 3, 7, 4, 8, 5, 10, 9];
+  ////////////////////////////////////////////////////////
+  let Key1;
+  let Key2;
+  let S0 = [
+    ["01", "00", "11", "10"],
+    ["11", "10", "01", "00"],
+    ["00", "10", "01", "11"],
+    ["11", "01", "11", "10"],
+  ];
 
-    const key1 = new Array(8).fill(0);
-    const key2 = new Array(8).fill(0);
+  function P4(s) {
+    let temp = [];
+    temp[0] = s[0];
+    temp[1] = s[1];
+    temp[2] = s[2];
+    temp[3] = s[3];
 
-    const IP = [2, 6, 3, 1, 4, 8, 5, 7];
-    const EP = [4, 1, 2, 3, 2, 3, 4, 1];
-    const P4 = [2, 4, 3, 1];
-    const IP_inv = [4, 1, 3, 5, 7, 2, 8, 6];
-
-    const S0 = [
-      [1, 0, 3, 2],
-      [3, 2, 1, 0],
-      [0, 2, 1, 3],
-      [3, 1, 3, 2],
-    ];
-    const S1 = [
-      [0, 1, 2, 3],
-      [2, 0, 1, 3],
-      [3, 0, 1, 0],
-      [2, 1, 0, 3],
-    ];
-
-    // this function basically generates the key(key1 and key2) using P10 and P8 with (1 and 2)left shifts
-    const key_generation = () => {
-      const key_ = new Array(10);
-
-      for (let i = 0; i < 10; i++) {
-        key_[i] = key[P10[i] - 1];
-      }
-
-      const Ls = new Array(5);
-      const Rs = new Array(5);
-
-      for (let i = 0; i < 5; i++) {
-        Ls[i] = key_[i];
-        Rs[i] = key_[i + 5];
-      }
-
-      const Ls_1 = shift(Ls, 1);
-      const Rs_1 = shift(Rs, 1);
-
-      for (let i = 0; i < 5; i++) {
-        key_[i] = Ls_1[i];
-        key_[i + 5] = Rs_1[i];
-      }
-
-      for (let i = 0; i < 8; i++) {
-        key1[i] = key_[P8[i] - 1];
-      }
-
-      const Ls_2 = shift(Ls, 2);
-      const Rs_2 = shift(Rs, 2);
-
-      for (let i = 0; i < 5; i++) {
-        key_[i] = Ls_2[i];
-        key_[i + 5] = Rs_2[i];
-      }
-
-      for (let i = 0; i < 8; i++) {
-        key2[i] = key_[P8[i] - 1];
-      }
-
-      console.log("Your Key-1 :");
-      console.log(key1.join(" "));
-      console.log("Your Key-2 :");
-      console.log(key2.join(" "));
-    };
-
-    // this function is use full for shifting(circular) the array n position towards left
-    const shift = (ar, n) => {
-      while (n > 0) {
-        const temp = ar[0];
-        for (let i = 0; i < ar.length - 1; i++) {
-          ar[i] = ar[i + 1];
-        }
-        ar[ar.length - 1] = temp;
-        n--;
-      }
-      return ar;
-    };
-
-    // this is main encryption function takes plain text as input uses another functions and returns the array of cipher text
-    const encryption = (plaintext) => {
-      const arr = new Array(8);
-
-      for (let i = 0; i < 8; i++) {
-        arr[i] = plaintext[IP[i] - 1];
-      }
-      const arr1 = function_(arr, key1);
-
-      const after_swap = swap(arr1, arr1.length / 2);
-
-      const arr2 = function_(after_swap, key2);
-
-      const ciphertext = new Array(8);
-
-      for (let i = 0; i < 8; i++) {
-        ciphertext[i] = arr2[IP_inv[i] - 1];
-      }
-
-      return ciphertext;
-    };
-
-    // decimal to binary string 0-3
-    const binary_ = (val) => {
-      if (val === 0) return "00";
-      else if (val === 1) return "01";
-      else if (val === 2) return "10";
-      else return "11";
-    };
-
-    // this function is doing core things like expansion then xor with desired key then S0 and S1 substitution P4 permutation and again xor we have used this function 2 times(key-1 and key-2) during encryption and 2 times(key-2 and key-1) during decryption
-    const function_ = (ar, key_) => {
-      const l = new Array(4);
-      const r = new Array(4);
-
-      for (let i = 0; i < 4; i++) {
-        l[i] = ar[i];
-        r[i] = ar[i + 4];
-      }
-
-      const ep = new Array(8);
-
-      for (let i = 0; i < 8; i++) {
-        ep[i] = r[EP[i] - 1];
-      }
-
-      for (let i = 0; i < 8; i++) {
-        ar[i] = key_[i] ^ ep[i];
-      }
-
-      const l_1 = new Array(4);
-      const r_1 = new Array(4);
-
-      for (let i = 0; i < 4; i++) {
-        l_1[i] = ar[i];
-        r_1[i] = ar[i + 4];
-      }
-
-      let row, col, val;
-
-      row = parseInt(`${l_1[0]}${l_1[3]}`, 2);
-      col = parseInt(`${l_1[1]}${l_1[2]}`, 2);
-      val = S0[row][col];
-      const str_l = binary_(val);
-
-      row = parseInt(`${r_1[0]}${r_1[3]}`, 2);
-      col = parseInt(`${r_1[1]}${r_1[2]}`, 2);
-      val = S1[row][col];
-      const str_r = binary_(val);
-
-      const r_ = new Array(4);
-      for (let i = 0; i < 2; i++) {
-        const c1 = str_l.charAt(i);
-        const c2 = str_r.charAt(i);
-        r_[i] = parseInt(c1, 10);
-        r_[i + 2] = parseInt(c2, 10);
-      }
-      const r_p4 = new Array(4);
-      for (let i = 0; i < 4; i++) {
-        r_p4[i] = r_[P4[i] - 1];
-      }
-
-      for (let i = 0; i < 4; i++) {
-        l[i] = l[i] ^ r_p4[i];
-      }
-
-      const output = new Array(8);
-      for (let i = 0; i < 4; i++) {
-        output[i] = l[i];
-        output[i + 4] = r[i];
-      }
-      return output;
-    };
-
-    // this function swaps the nibble of size n(4)
-    const swap = (array, n) => {
-      const l = new Array(n);
-      const r = new Array(n);
-
-      for (let i = 0; i < n; i++) {
-        l[i] = array[i];
-        r[i] = array[i + n];
-      }
-
-      const output = new Array(2 * n);
-      for (let i = 0; i < n; i++) {
-        output[i] = r[i];
-        output[i + n] = l[i];
-      }
-
-      return output;
-    };
-
-    // this is main decryption function
-    // here we have used all previously defined function
-    // it takes cipher text as input and returns the array of decrypted text
-    const decryption = (ar) => {
-      const arr = new Array(8);
-
-      for (let i = 0; i < 8; i++) {
-        arr[i] = ar[IP[i] - 1];
-      }
-
-      const arr1 = function_(arr, key2);
-
-      const after_swap = swap(arr1, arr1.length / 2);
-
-      const arr2 = function_(after_swap, key1);
-
-      const decrypted = new Array(8);
-
-      for (let i = 0; i < 8; i++) {
-        decrypted[i] = arr2[IP_inv[i] - 1];
-      }
-
-      return decrypted;
-    };
-
-    key_generation(); // call to key generation function
-
-    // int []plaintext= {1,0,1,0,0,1,0,1};
-    // const plaintext = [1, 0, 0, 1, 0, 1, 1, 1]; // extra example for checking purpose
-
-    console.log();
-    console.log("Your plain Text is :");
-    console.log(plaintext.join(" ")); // printing the plaintext
-
-    const ciphertext = encryption(plaintext);
-
-    console.log();
-    console.log("Your cipher Text is :"); // printing the cipher text
-    console.log(ciphertext.join(" "));
-
-    const decrypted = decryption(ciphertext);
-
-    console.log();
-    console.log("Your decrypted Text is :"); // printing the decrypted text
-    console.log(decrypted.join(" "));
-    return (result = [ciphertext, decrypted]);
+    s = temp[1] + temp[3] + temp[2] + temp[0];
+    return s;
   }
-}
-{
+
+  let S1 = [
+    ["00", "01", "10", "11"],
+    ["10", "00", "01", "11"],
+    ["11", "00", "01", "00"],
+    ["10", "01", "00", "11"],
+  ];
+
+  function LeftShift(s) {
+    let p = "";
+    for (let i = 1; i < s.length; i++) {
+      p += s[i];
+    }
+    p += s[0];
+    return p;
+  }
+
+  function IP(s) {
+    let temp = [];
+    temp[0] = s[0];
+    temp[1] = s[1];
+    temp[2] = s[2];
+    temp[3] = s[3];
+    temp[4] = s[4];
+    temp[5] = s[5];
+    temp[6] = s[6];
+    temp[7] = s[7];
+
+    s = temp[1] + temp[5] + temp[2] + temp[0] + temp[3] + temp[7] + temp[4] + temp[6];
+    return s;
+  }
+
+  function InverseIP(s) {
+    let temp = [];
+    temp[0] = s[0];
+    temp[1] = s[1];
+    temp[2] = s[2];
+    temp[3] = s[3];
+    temp[4] = s[4];
+    temp[5] = s[5];
+    temp[6] = s[6];
+    temp[7] = s[7];
+
+    s = temp[3] + temp[0] + temp[2] + temp[4] + temp[6] + temp[1] + temp[7] + temp[5];
+    return s;
+  }
+
+  function EP(s) {
+    let p = "aaaaaaaa";
+    let temp = [];
+    temp[0] = s[0];
+    temp[1] = s[1];
+    temp[2] = s[2];
+    temp[3] = s[3];
+
+    p = temp[3] + temp[0] + temp[1] + temp[2] + temp[1] + temp[2] + temp[3] + temp[0];
+    return p;
+  }
+
+  function P8(s) {
+    let temp = [];
+    temp[0] = s[0];
+    temp[1] = s[1];
+    temp[2] = s[2];
+    temp[3] = s[3];
+    temp[4] = s[4];
+    temp[5] = s[5];
+    temp[6] = s[6];
+    temp[7] = s[7];
+    temp[8] = s[8];
+    temp[9] = s[9];
+
+    s = temp[5] + temp[2] + temp[6] + temp[3] + temp[7] + temp[4] + temp[9] + temp[8];
+    s = s.substring(0, 8);
+    return s;
+  }
+
+  function XOR(s, k) {
+    let p = "";
+    for (let i = 0; i < s.length; i++) {
+      p += s[i] != k[i] ? "1" : "0";
+    }
+
+    return p;
+  }
+
+  function P10(s) {
+    let temp = [];
+    temp[0] = s[0];
+    temp[1] = s[1];
+    temp[2] = s[2];
+    temp[3] = s[3];
+    temp[4] = s[4];
+    temp[5] = s[5];
+    temp[6] = s[6];
+    temp[7] = s[7];
+    temp[8] = s[8];
+    temp[9] = s[9];
+
+    s = temp[2] + temp[4] + temp[1] + temp[6] + temp[3] + temp[9] + temp[0] + temp[8] + temp[6] + temp[5];
+    return s;
+  }
+
+  function CalRow(s) {
+    let row;
+    let first, second, third, fourth;
+    let firstbit, secondbit, thirdbit, fourthbit;
+    first = s[0];
+    second = s[1];
+    third = s[2];
+    fourth = s[3];
+    firstbit = parseInt(first);
+    secondbit = parseInt(second);
+    thirdbit = parseInt(third);
+    fourthbit = parseInt(fourth);
+    if (secondbit == 1) secondbit = 2;
+    if (firstbit == 1) firstbit = 2;
+    row = firstbit + fourthbit;
+    return row;
+  }
+
+  function CalCol(s) {
+    let col;
+    let first, second, third, fourth;
+    let firstbit, secondbit, thirdbit, fourthbit;
+    first = s[0];
+    second = s[1];
+    third = s[2];
+    fourth = s[3];
+    firstbit = parseInt(first);
+    secondbit = parseInt(second);
+    thirdbit = parseInt(third);
+    fourthbit = parseInt(fourth);
+    if (secondbit == 1) secondbit = 2;
+    if (firstbit == 1) firstbit = 2;
+    col = secondbit + thirdbit;
+    return col;
+  }
+
+  function FirstRound(plaintext, Key) {
+    Key = P10(Key);
+    let firstHalf = Key.substring(0, Key.length / 2);
+    let secondHalf = Key.substring(Key.length / 2);
+    firstHalf = LeftShift(firstHalf);
+    secondHalf = LeftShift(secondHalf);
+    Key = firstHalf + secondHalf;
+    Key = P8(Key);
+    Key1 = Key;
+    firstHalf = LeftShift(firstHalf);
+    firstHalf = LeftShift(firstHalf);
+    secondHalf = LeftShift(secondHalf);
+    secondHalf = LeftShift(secondHalf);
+    Key = firstHalf + secondHalf;
+    Key = P8(Key);
+    Key2 = Key;
+    plaintext = IP(plaintext);
+    let leftHalfAfterIP;
+    let rightHalfAfterIP;
+    leftHalfAfterIP = plaintext.substring(0, plaintext.length / 2);
+    rightHalfAfterIP = plaintext.substring(plaintext.length / 2);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    secondHalf = EP(secondHalf);
+    plaintext = secondHalf;
+    plaintext = XOR(plaintext, Key1);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    firstHalf = plaintext.substring(0, plaintext.length / 2);
+    let row, col;
+    row = CalRow(firstHalf);
+    col = CalCol(firstHalf);
+    plaintext = plaintext.substring(0, 4);
+    plaintext = S0[row][col];
+    row = CalRow(secondHalf);
+    col = CalCol(secondHalf);
+    plaintext = plaintext + S1[row][col];
+    plaintext = P4(plaintext);
+    plaintext = XOR(plaintext, leftHalfAfterIP);
+    plaintext = plaintext + rightHalfAfterIP;
+    return plaintext;
+  }
+
+  function DecryptFirstRound(plaintext, Key) {
+    Key = P10(Key);
+    let firstHalf = Key.substring(0, Key.length / 2);
+    let secondHalf = Key.substring(Key.length / 2);
+    firstHalf = LeftShift(firstHalf);
+    secondHalf = LeftShift(secondHalf);
+    Key = firstHalf + secondHalf;
+    Key = P8(Key);
+    Key1 = Key;
+    firstHalf = LeftShift(firstHalf);
+    firstHalf = LeftShift(firstHalf);
+    secondHalf = LeftShift(secondHalf);
+    secondHalf = LeftShift(secondHalf);
+    Key = firstHalf + secondHalf;
+    Key = P8(Key);
+    Key2 = Key;
+    plaintext = IP(plaintext);
+    let leftHalfAfterIP;
+    let rightHalfAfterIP;
+    leftHalfAfterIP = plaintext.substring(0, plaintext.length / 2);
+    rightHalfAfterIP = plaintext.substring(plaintext.length / 2);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    secondHalf = EP(secondHalf);
+    plaintext = secondHalf;
+    plaintext = XOR(plaintext, Key2);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    firstHalf = plaintext.substring(0, plaintext.length / 2);
+    let row, col;
+    row = CalRow(firstHalf);
+    col = CalCol(firstHalf);
+    plaintext = plaintext.substring(0, 4);
+    plaintext = S0[row][col];
+    row = CalRow(secondHalf);
+    col = CalCol(secondHalf);
+    plaintext = plaintext + S1[row][col];
+    plaintext = P4(plaintext);
+    plaintext = XOR(plaintext, leftHalfAfterIP);
+    plaintext = plaintext + rightHalfAfterIP;
+    return plaintext;
+  }
+
+  function DecryptSecondRound(plaintext, Key) {
+    let secondHalf, firstHalf;
+    let leftHalfAfterIP;
+    let rightHalfAfterIP;
+    leftHalfAfterIP = plaintext.substring(0, plaintext.length / 2);
+    rightHalfAfterIP = plaintext.substring(plaintext.length / 2);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    secondHalf = EP(secondHalf);
+    plaintext = secondHalf;
+    plaintext = XOR(plaintext, Key1);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    firstHalf = plaintext.substring(0, plaintext.length / 2);
+    let row, col;
+    row = CalRow(firstHalf);
+    col = CalCol(firstHalf);
+    plaintext = plaintext.substring(0, 4);
+    plaintext = S0[row][col];
+    row = CalRow(secondHalf);
+    col = CalCol(secondHalf);
+    plaintext = plaintext + S1[row][col];
+    plaintext = P4(plaintext);
+    plaintext = XOR(plaintext, leftHalfAfterIP);
+    plaintext = plaintext + rightHalfAfterIP;
+    plaintext = InverseIP(plaintext);
+    return plaintext;
+  }
+
+  function SecondRound(plaintext, Key) {
+    let secondHalf, firstHalf;
+    let leftHalfAfterIP;
+    let rightHalfAfterIP;
+    leftHalfAfterIP = plaintext.substring(0, plaintext.length / 2);
+    rightHalfAfterIP = plaintext.substring(plaintext.length / 2);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    secondHalf = EP(secondHalf);
+    plaintext = secondHalf;
+    plaintext = XOR(plaintext, Key2);
+    secondHalf = plaintext.substring(plaintext.length / 2);
+    firstHalf = plaintext.substring(0, plaintext.length / 2);
+    let row, col;
+    row = CalRow(firstHalf);
+    col = CalCol(firstHalf);
+    plaintext = plaintext.substring(0, 4);
+    plaintext = S0[row][col];
+    row = CalRow(secondHalf);
+    col = CalCol(secondHalf);
+    plaintext = plaintext + S1[row][col];
+    plaintext = P4(plaintext);
+    plaintext = XOR(plaintext, leftHalfAfterIP);
+    plaintext = plaintext + rightHalfAfterIP;
+    plaintext = InverseIP(plaintext);
+    return plaintext;
+  }
+
+  function Flip(s) {
+    let newS = "";
+    let firstHalf, secondHalf;
+    secondHalf = s.substring(s.length / 2);
+    firstHalf = s.substring(0, s.length / 2);
+    newS = secondHalf + firstHalf;
+    return newS;
+  }
+  ////////////////////////////////
   document.getElementById("des-encrypt").onclick = function () {
-    let myInt_k = document.getElementById("des-key").value;
-    let myFunc_k = (num_k) => Number(num_k);
-    let intArr_k = Array.from(String(myInt_k), myFunc_k);
+    let plaintext = document.getElementById("des-text").value;
+    let Key = document.getElementById("des-key").value;
+    ////////////////
+    if (Key.length == 10) {
+      for (let i = 0; i < 10; i++) {
+        if (Key[i] != "0" && Key[i] != "1") {
+          console.log("Error");
+          break;
+        }
+      }
+    } else {
+      console.log("Error");
+    }
 
-    let myInt_p = document.getElementById("des-text").value;
-    let myFunc_p = (num_p) => Number(num_p);
-    let intArr_p = Array.from(String(myInt_p), myFunc_p);
+    if (plaintext.length == 8) {
+      for (let i = 0; i < 8; i++) {
+        if (plaintext[i] != "0" && plaintext[i] != "1") {
+          console.log("error");
+          break;
+        }
+      }
+    } else {
+      console.log("error");
+    }
 
-    let result = des(intArr_k, intArr_p);
-    let digits = result[0];
-
-    let _result = digits.join("");
-
-    console.log(_result);
-    document.getElementById("des-result").value = _result;
+    ///////////////
+    let result;
+    result = FirstRound(plaintext, Key);
+    result = Flip(result);
+    result = SecondRound(result, Key);
+    document.getElementById("des-result").value = result;
   };
+
   document.getElementById("des-decrypt").onclick = function () {
-    let myInt_k = document.getElementById("des-key").value;
-    let myFunc_k = (num_k) => Number(num_k);
-    let intArr_k = Array.from(String(myInt_k), myFunc_k);
+    let ciphertext = document.getElementById("des-text").value;
+    let Key = document.getElementById("des-key").value;
+    //////////////////
+    if (Key.length == 10) {
+      for (let i = 0; i < 10; i++) {
+        if (Key[i] != "0" && Key[i] != "1") {
+          console.log("Error");
+          break;
+        }
+      }
+    } else {
+      console.log("Error");
+    }
 
-    let myInt_p = document.getElementById("des-text").value;
-    let myFunc_p = (num_p) => Number(num_p);
-    let intArr_p = Array.from(String(myInt_p), myFunc_p);
-
-    let result = des(intArr_k, intArr_p);
-    let digits = result[1];
-
-    let _result = digits.join("");
-
-    console.log(_result);
-    document.getElementById("des-result").value = _result;
+    if (ciphertext.length == 8) {
+      for (let i = 0; i < 8; i++) {
+        if (ciphertext[i] != "0" && ciphertext[i] != "1") {
+          console.log("error");
+          break;
+        }
+      }
+    } else {
+      console.log("error");
+    }
+    /////////////////
+    let result;
+    result = DecryptFirstRound(ciphertext, Key);
+    result = Flip(result);
+    result = DecryptSecondRound(result, Key);
+    document.getElementById("des-result").value = result;
   };
 }
