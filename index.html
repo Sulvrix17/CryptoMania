@@ -47,8 +47,11 @@
         <hr />
         <span class="sub-title">1. Caesar Algorithm:</span>
         <p id="info">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem vitae
-          necessitatibus unde qui?
+          Caesar cipher, also known as Caesar's cipher, is a simple encryption technique where each letter in a given text is
+          shifted a certain number of places down the alphabet. For example, if we use a shift of three positions, the letter
+          'A' would be transformed into 'D', 'B' would become 'E', and so on. The algorithm uses a key to determine the
+          number of positions the letters should be shifted. This method is easy to understand and implement, but it's also
+          easy to decode, making it less secure for environments that require high data protection.
         </p>
         <br />
         <form>
@@ -76,8 +79,10 @@
           <br />
           <span class="sub-title">2. Autokey Algorithm:</span>
           <p id="info">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
-            vitae necessitatibus unde qui?
+            The Autokey cipher is an encryption method considered an improvement over the Caesar cipher. This algorithm uses
+            an additional keyword to increase security. Instead of using the same number of steps to shift every letter (as
+            in Caesar cipher), Autokey starts with a keyword and then continues to use the plaintext itself as part of the
+            key.
           </p>
           <br />
           <input type="text" id="autokey-text" name="text" placeholder="Hello" title="Enter A Text To Encrypt or Decrypt" />
@@ -98,8 +103,11 @@
           <br />
           <span class="sub-title">3. Playfair Algorithm:</span>
           <p id="info">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
-            vitae necessitatibus unde qui?
+            The Playfair cipher is an encryption method that uses a 5x5 table filled with a keyword followed by the remaining
+            letters of the alphabet. The text is divided into pairs of letters and encrypted based on their positions in the
+            table. If the letters are in the same row or column, they are replaced with the adjacent letters. If they are not
+            in the same row or column, letters at the corners of a rectangle formed by the pair are used. This method
+            provides more secure encryption compared to methods like the Caesar cipher.
           </p>
           <br />
           <input
@@ -125,8 +133,10 @@
           <br />
           <span class="sub-title">4. RSA Algorithm:</span>
           <p id="info">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
-            vitae necessitatibus unde qui?
+            The RSA algorithm is a cryptographic method that uses a pair of keys—a public key for encryption and a private
+            key for decryption. It generates these keys using two large prime numbers. This setup allows for secure message
+            transmission, even over insecure channels, because only the private key holder can decrypt the messages. RSA is
+            highly secure due to its mathematical complexity.
           </p>
           <br />
           <input
@@ -167,8 +177,11 @@
           <br />
           <span class="sub-title">5. S-DES Algorithm:</span>
           <p id="info">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam illum at esse repellat praesentium sit dolorem
-            vitae necessitatibus unde qui?
+            The S-DES algorithm, also known as Simplified Data Encryption Standard, is a simplified version of DES (Data
+            Encryption Standard) used for educational and research purposes to explain encryption concepts. S-DES encrypts
+            and decrypts data using a fixed 10-bit key to generate subkeys for each round of the process, applying a series
+            of simple transformations and operations on fixed 8-bit data blocks. This algorithm aims to provide a clear and
+            concise overview of how more complex systems like DES and AES work.
           </p>
           <br />
           <input
